@@ -1,3 +1,8 @@
+# Do not stash the files produced by the fetching/wrangling scripts
+datasets/**/fetched
+datasets/**/wrangled
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
