@@ -1,6 +1,8 @@
 # Do not stash the files produced by the fetching/wrangling scripts
 corral/
 _tmp/
+data/*
+!data/ssa-babynames-annual-top-10.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

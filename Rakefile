@@ -21,13 +21,27 @@ FILES = {
     fetched_nationwide: (START_YEAR..END_YEAR).map{|y| DIRS[:fetched_nationwide].join("yob#{y}.txt")},
     fetched_states: STATE_ABBREVS.map{|s| DIRS[:fetched_states].join("#{s}.TXT")},
     compiled_nationwide: DIRS[:compiled].join("nationwide.csv"),
-
     compiled_states: DIRS[:compiled].join("states.csv"),
     compiled_all: DIRS[:compiled].join("all.csv"),
-
     ranks_ratios: DIRS[:supplemented].join('ranks-ratios.csv'),
     name_aggregates: DIRS[:supplemented].join('name-aggregates.csv'),
 }
+
+PUB_FILES = {
+    complete: 'ssa-babynames.csv',
+    since_1950: 'ssa-babynames-since-1950.csv',
+    since_1980: 'ssa-babynames-since-1980.csv',
+    p2000_2015: 'ssa-babynames-2000-through-2015.csv',
+    nationwide: 'ssa-babynames-nationwide.csv',
+    nationwide_since_1950: 'ssa-babynames-nationwide-since-1950.csv',
+    nationwide_since_1980: 'ssa-babynames-nationwide-since-1980.csv',
+    nationwide_2000_2015: 'ssa-babynames-nationwide-2000-through-2015.csv',
+    nationwide_top_10: "ssa-babynames-nationwide-annual-top-10.csv",
+    top_10: "ssa-babynames-annual-top-10.csv",
+}
+
+PUB_FILES.each_pair{|k, v| PUB_FILES[k] = DIRS[:published].join(v)}
+
 
 
 shell = Shell.new
@@ -72,23 +86,152 @@ namespace :fetch do
 end
 
 
-
-
 ################################
 # Files and their dependencies
 
-# packages
-# desc "Top 1000 names of all time, regardless of sex"
-# desc "Top 1000 names of all time, by sex"
-# desc "All names, from 1950 through 2015"
-# desc "All names, from 1995 through 2015"
+
+
+desc "Complete data to be published; all years, all states"
+file PUB_FILES[:complete] => FILES[:ranks_ratios] do
+    sh "cp #{FILES[:ranks_ratios]} #{PUB_FILES[:complete]}"
+end
+
+
+desc "Data from 1950"
+file PUB_FILES[:since_1950] => PUB_FILES[:complete] do
+    sh [
+        "python",
+        SCRIPTS_DIR.join('filter_time_period.py'),
+        PUB_FILES[:complete],
+        "--start-year 1950",
+        ">",
+        PUB_FILES[:since_1950],
+       ].join(' ')
+end
+
+
+desc "Data from 1980"
+file PUB_FILES[:since_1980] => PUB_FILES[:since_1950] do
+    sh [
+        "python",
+        SCRIPTS_DIR.join('filter_time_period.py'),
+        PUB_FILES[:since_1950],
+        "--start-year 1980",
+        ">",
+        PUB_FILES[:since_1980],
+       ].join(' ')
+end
+
+desc "Data from 2000 through 2015"
+file PUB_FILES[:p2000_2015] => PUB_FILES[:since_1980] do
+    sh [
+        "python",
+        SCRIPTS_DIR.join('filter_time_period.py'),
+        PUB_FILES[:since_1980],
+        "--start-year 2000",
+        "--end-year 2015",
+        ">",
+        PUB_FILES[:p2000_2015],
+       ].join(' ')
+end
+
+
+
+
+desc "Nationwide-data only"
+file PUB_FILES[:nationwide] => PUB_FILES[:complete] do
+    sh [
+        "python",
+        SCRIPTS_DIR.join('filter_time_period.py'),
+        PUB_FILES[:complete],
+        "--states US",
+        ">",
+        PUB_FILES[:nationwide],
+       ].join(' ')
+end
+
+desc "Nationwide-data since 1950"
+file PUB_FILES[:nationwide_since_1950] => PUB_FILES[:nationwide] do
+    sh [
+        "python",
+        SCRIPTS_DIR.join('filter_time_period.py'),
+        PUB_FILES[:nationwide],
+        "--start-year 1950",
+        "--states US",
+        ">",
+        PUB_FILES[:nationwide_since_1950],
+       ].join(' ')
+end
+
+desc "Nationwide-data since 1980"
+file PUB_FILES[:nationwide_since_1980] => PUB_FILES[:nationwide_since_1950] do
+    sh [
+        "python",
+        SCRIPTS_DIR.join('filter_time_period.py'),
+        PUB_FILES[:nationwide_since_1950],
+        "--start-year 1980",
+        "--states US",
+        ">",
+        PUB_FILES[:nationwide_since_1980],
+       ].join(' ')
+end
+
+
+desc "Data from 2000 through 2015"
+file PUB_FILES[:nationwide_2000_2015] => PUB_FILES[:nationwide_since_1980] do
+    sh [
+        "python",
+        SCRIPTS_DIR.join('filter_time_period.py'),
+        PUB_FILES[:nationwide_since_1980],
+        "--start-year 2000",
+        "--end-year 2015",
+        ">",
+        PUB_FILES[:nationwide_2000_2015],
+       ].join(' ')
+end
+
+
+
+desc "Top 10 names per year, state, and sex"
+file PUB_FILES[:top_10] => PUB_FILES[:complete] do
+    sh [
+        "python",
+        SCRIPTS_DIR.join('filter_time_period.py'),
+        PUB_FILES[:complete],
+        "--rank 10",
+        ">",
+        PUB_FILES[:top_10],
+       ].join(' ')
+end
+
+desc "Top 10 names per year, state, and sex by nation"
+file PUB_FILES[:nationwide_top_10] => PUB_FILES[:top_10] do
+    sh [
+        "python",
+        SCRIPTS_DIR.join('filter_time_period.py'),
+        PUB_FILES[:top_10],
+        "--states US",
+        ">",
+        PUB_FILES[:nationwide_top_10],
+       ].join(' ')
+end
+
+
+
+
+
+
+
+### Intermediate files
+
 
 
 desc "Rankings, ratios of names, regardless of sex"
 file FILES[:name_aggregates] => FILES[:compiled_all] do
-    sh """python #{SCRIPTS_DIR.join('calculate_rank_ratio_by_name.py')} \
+    sh %Q{python #{SCRIPTS_DIR.join('calculate_rank_ratio_by_name.py')} \
               #{FILES[:compiled_all]} \
-            > #{FILES[:name_aggregates]}"""
+            > #{FILES[:name_aggregates]}
+        }
 end
 
 
