@@ -35,6 +35,10 @@ mylogger = logging.getLogger('foo')
 mylogger.setLevel(logging.INFO)
 mylogger.addHandler(logging.StreamHandler())
 
+# not used in scripts, but stated here as a reference
+COMPLETE_HEADERS = ['state', 'year', 'name', 'sex',
+                    'count', 'rank_within_sex', 'per_100k_within_sex']
+
 def calculate_and_rank(original_df):
     """
     Reads a CSV data file and calculates columns 'per_100k_within_sex' and 'rank_within_sex'
