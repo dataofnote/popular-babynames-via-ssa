@@ -1,0 +1,75 @@
+
+
+title: Baby Names on Social Security Applications
+slug: ssa-babynames
+description: |
+  Contains counts of names by year, state (including nationwide), and sex. Also contains popularity calculations in the form of rank and per-100k ratios.
+
+caveats: |
+  For any group of sex, state, and year, if there are less than 5 occurrences of a name, that name will not be included in the data for privacy reasons.
+
+traits:
+  geospatial:
+    fields:
+      - name: state
+        type: state_or_province
+
+  chronological:
+    fields:
+      - name: time
+        granularity: year
+
+
+indexes:
+  - fields: [name, year, state, sex]
+    primary: true
+  - fields: [year]
+  - fields: [state]
+
+
+fields:
+  - name: state
+    type: string
+    description: |
+      2-letter abbreviation for U.S. state of application. Or 'US' for nationwide totals.
+    examples:
+      - NY
+      - IA
+      - US
+
+  - name: year
+    type: integer
+    description: |
+      Year of application.
+    examples:
+      - 1880
+      - 2015
+
+  - name: name
+    type: string
+    examples:
+      - Mason
+      - Elizabeth
+
+  - name: sex
+    type: string
+    enumerations:
+      - M
+      - F
+
+  - name: rank_within_sex
+    type: integer
+    description: |
+      How popular a name is within a given sex, state, and year. A rank of "1" indicates that the name was the most popular in its group.
+    examples:
+      - 1
+      - 567
+
+  - name: per_100k_within_sex
+    type: float
+    length: [6,1]
+    description: |
+      The number of babies with a given name per 100,000 born in a given sex, state, and year.
+    examples:
+      - 8626.1
+      - 248.9
