@@ -1,3 +1,6 @@
+# This was written awhile ago and doesn't follow my more
+# sane, modern conventions...
+
 require 'pathname'
 require 'shellwords'
 require 'shell'
@@ -10,7 +13,7 @@ DIRS = {
     :fetched_states => WRANGLE_DIR.join('corral', 'fetched', 'states'),
     :compiled => WRANGLE_DIR.join('corral', 'compiled'),
     :supplemented => WRANGLE_DIR.join('corral', 'supplemented'),
-    :published =>  Pathname('data'),
+    :published =>  Pathname('catalog'),
 }
 
 START_YEAR = 1880
@@ -101,7 +104,7 @@ desc "Data from 1950"
 file PUB_FILES[:since_1950] => PUB_FILES[:complete] do
     sh [
         "python",
-        SCRIPTS_DIR.join('filter_time_period.py'),
+        SCRIPTS_DIR.join('filter_columns.py'),
         PUB_FILES[:complete],
         "--start-year 1950",
         ">",
@@ -114,7 +117,7 @@ desc "Data from 1980"
 file PUB_FILES[:since_1980] => PUB_FILES[:since_1950] do
     sh [
         "python",
-        SCRIPTS_DIR.join('filter_time_period.py'),
+        SCRIPTS_DIR.join('filter_columns.py'),
         PUB_FILES[:since_1950],
         "--start-year 1980",
         ">",
@@ -126,7 +129,7 @@ desc "Data from 2000 through 2015"
 file PUB_FILES[:p2000_2015] => PUB_FILES[:since_1980] do
     sh [
         "python",
-        SCRIPTS_DIR.join('filter_time_period.py'),
+        SCRIPTS_DIR.join('filter_columns.py'),
         PUB_FILES[:since_1980],
         "--start-year 2000",
         "--end-year 2015",
@@ -142,7 +145,7 @@ desc "Nationwide-data only"
 file PUB_FILES[:nationwide] => PUB_FILES[:complete] do
     sh [
         "python",
-        SCRIPTS_DIR.join('filter_time_period.py'),
+        SCRIPTS_DIR.join('filter_columns.py'),
         PUB_FILES[:complete],
         "--states US",
         ">",
@@ -154,7 +157,7 @@ desc "Nationwide-data since 1950"
 file PUB_FILES[:nationwide_since_1950] => PUB_FILES[:nationwide] do
     sh [
         "python",
-        SCRIPTS_DIR.join('filter_time_period.py'),
+        SCRIPTS_DIR.join('filter_columns.py'),
         PUB_FILES[:nationwide],
         "--start-year 1950",
         "--states US",
@@ -167,7 +170,7 @@ desc "Nationwide-data since 1980"
 file PUB_FILES[:nationwide_since_1980] => PUB_FILES[:nationwide_since_1950] do
     sh [
         "python",
-        SCRIPTS_DIR.join('filter_time_period.py'),
+        SCRIPTS_DIR.join('filter_columns.py'),
         PUB_FILES[:nationwide_since_1950],
         "--start-year 1980",
         "--states US",
@@ -181,7 +184,7 @@ desc "Data from 2000 through 2015"
 file PUB_FILES[:nationwide_2000_2015] => PUB_FILES[:nationwide_since_1980] do
     sh [
         "python",
-        SCRIPTS_DIR.join('filter_time_period.py'),
+        SCRIPTS_DIR.join('filter_columns.py'),
         PUB_FILES[:nationwide_since_1980],
         "--start-year 2000",
         "--end-year 2015",
@@ -196,7 +199,7 @@ desc "Top 10 names per year, state, and sex"
 file PUB_FILES[:top_10] => PUB_FILES[:complete] do
     sh [
         "python",
-        SCRIPTS_DIR.join('filter_time_period.py'),
+        SCRIPTS_DIR.join('filter_columns.py'),
         PUB_FILES[:complete],
         "--rank 10",
         ">",
@@ -208,7 +211,7 @@ desc "Top 10 names per year, state, and sex by nation"
 file PUB_FILES[:nationwide_top_10] => PUB_FILES[:top_10] do
     sh [
         "python",
-        SCRIPTS_DIR.join('filter_time_period.py'),
+        SCRIPTS_DIR.join('filter_columns.py'),
         PUB_FILES[:top_10],
         "--states US",
         ">",

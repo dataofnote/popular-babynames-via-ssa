@@ -2,6 +2,12 @@
 Names (mostly of babies) as recorded by the U.S. Social Security Administration
 
 
+# Todos
+
+- Figure out how to deal with LFS files
+- Write schemas
+- 
+
 
 Articles:
 
@@ -20,3 +26,6 @@ authors:
   - Nate Silver
   - Allison Mccann
 word_count: 1050
+
+
+http://www.nytimes.com/2016/08/21/fashion/gender-neutral-baby-names.html

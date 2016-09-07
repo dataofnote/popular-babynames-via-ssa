@@ -6,8 +6,6 @@ from csv import DictReader, DictWriter
 from sys import stdout
 
 
-
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser("Filter input file by specified columns")
     parser.add_argument('infile', type=argparse.FileType('r'))
