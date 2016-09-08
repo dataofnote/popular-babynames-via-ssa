@@ -1,0 +1,65 @@
+- datasets:
+
+
+  - path: catalog/ssa-babynames.csv
+    title: Complete baby name data from the Social Security Administration
+    description: |
+      All of the records currently (1880 through 2015) included in both the nationwide and indivdual state datasets released by the Social Security Administration.
+    schema: meta/schemas/ssa-babynames.yaml
+
+
+  - path: catalog/ssa-babynames-nationwide.csv
+    title: Baby names nationwide, Social Security Administration
+    description: |
+      All of the records currently (1880 through 2015) included in the nationwide  dataset released by the Social Security Administration.
+    schema: meta/schemas/ssa-babynames.yaml
+
+
+  - path: catalog/ssa-babynames-since-1950.csv
+    title: Baby names since 1950, Social Security Admininstration
+    description: |
+      The name counts before 1950 may be heavily skewed because of stricter requirements for applying for Social Security.
+    schema: meta/schemas/ssa-babynames.yaml
+
+
+  - path: catalog/ssa-babynames-nationwide-since-1950.csv
+    title: Baby names since 1950, Social Security Admininstration
+    description: |
+      Nationwide only. The name counts before 1950 may be heavily skewed because of stricter requirements for applying for Social Security.
+    schema: meta/schemas/ssa-babynames.yaml
+
+
+  - path: catalog/ssa-babynames-since-1980.csv
+    title: Baby names since 1980, Social Security Admininstration
+    description: |
+      In 1986, the IRS started requiring Social Security identification in order to receive tax deductions for dependents.
+    schema: meta/schemas/ssa-babynames.yaml
+
+
+  - path: catalog/ssa-babynames-nationwide-since-1980.csv
+    title: Baby names nationwide since 1980, Social Security Admininstration
+    description: |
+      Nationwide data only. In 1986, the IRS started requiring Social Security identification in order to receive tax deductions for dependents.
+    schema: meta/schemas/ssa-babynames.yaml
+
+
+  - path: catalog/ssa-babynames-2000-through-2015.csv
+    title: Baby names, 2000 through 2015, Social Security Admininstration
+    schema: meta/schemas/ssa-babynames.yaml
+
+
+  - path: catalog/ssa-babynames-nationwide-2000-through-2015.csv
+    title: Baby names nationwide, 2000 through 2015, Social Security Admininstration
+    schema: meta/schemas/ssa-babynames.yaml
+
+
+  - path: catalog/ssa-babynames-annual-top-10.csv
+    title: Annual top 10 baby names, Social Security Admininstration
+    description: The top 10 babynames every year for males and females for all states and nationwide.
+    schema: meta/schemas/ssa-babynames.yaml
+
+
+  - path: catalog/ssa-babynames-nationwide-annual-top-10.csv
+    title: Annual top 10 baby names nationwide, Social Security Admininstration
+    description: The top 10 babynames every year for males and females for nationwide only.
+    schema: meta/schemas/ssa-babynames.yaml
