@@ -68,6 +68,13 @@ namespace :package do
     task :compile do
         Rake::Task[FILES[:compiled_all]].invoke
     end
+
+    desc "Publish the various files"
+    task :publish do
+        PUB_FILES.each_value do |f|
+            Rake::Task[f].execute
+        end
+    end
 end
 
 
